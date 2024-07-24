@@ -1,0 +1,14 @@
+node_modules/
+
+.env
+
+# Mac OS files
+.DS_Store
+
+# Environment-specific files
+.env.local
+.env.*.local
+
+.vscode/
+.idea/
+
