@@ -81,11 +81,12 @@ PROPOSER_ADDRESS=your-proposer-address
 API_KEY=your-api-key
 RATE_LIMIT_DELAY=200
 PORT=3000
+INFURA_PROJECT_ID='infura-project-id'
 ```
 
 ### Running the Scraper 
 ```
-node src/services/scrapeLogs.js
+node src/services/scrapeService.js
 ```
 ### Starting the Server
 ```
