@@ -11,7 +11,7 @@ const port = process.env.PORT || 3003;
         await connectToMongoDB();
         console.log('Database connected');
 
-        app.get('/find-sequencer', getSequencers);
+        app.get('/sequencer', getSequencers);
 
         app.listen(port, () => {
             console.log(`Server running on port ${port}`);
