@@ -3,14 +3,21 @@ const { MongoClient } = require('mongodb');
 
 const MONGO_URI = process.env.MONGO_URI;
 const DATABASE_NAME = process.env.DATABASE_NAME;
-const COLLECTION_NAME = process.env.COLLECTION_NAME;
+
+if (!MONGO_URI || !DATABASE_NAME) {
+    console.error('Missing required environment variables. Please ensure MONGO_URI and DATABASE_NAME are set in .env file.');
+    process.exit(1);
+}
 
 const client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+let db;
 
 async function connectToMongoDB() {
     try {
         await client.connect();
         console.log('Connected to MongoDB');
+        db = client.db(DATABASE_NAME);
     } catch (error) {
         console.error('Error connecting to MongoDB:', error);
         process.exit(1);
@@ -18,18 +25,17 @@ async function connectToMongoDB() {
 }
 
 async function insertTransaction(data) {
-    if (data.length === 0) {
-        console.log('No documents to insert');
-        return;
+    if (!db) {
+        throw new Error('Database not connected. Please call connectToMongoDB first.');
     }
-
+    
     try {
-        const database = client.db(DATABASE_NAME);
-        const collection = database.collection(COLLECTION_NAME);
+        const collection = db.collection(process.env.COLLECTION_NAME);
         const result = await collection.insertMany(data);
         console.log('Inserted documents:', result.insertedCount);
     } catch (error) {
         console.error('Error inserting documents:', error);
+        throw error;
     }
 }
 
@@ -42,10 +48,16 @@ async function closeConnection() {
     }
 }
 
+function getDb() {
+    if (!db) {
+        throw new Error('Database not connected. Please call connectToMongoDB first.');
+    }
+    return db;
+}
+
 module.exports = {
     connectToMongoDB,
     insertTransaction,
-    closeConnection
+    closeConnection,
+    getDb
 };
-module.exports.client = client;
-module.exports.db = client.db(DATABASE_NAME);
