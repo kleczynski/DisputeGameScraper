@@ -32,7 +32,7 @@ src/
   ├── routes/
   │   └── sequencerRoutes.js
   ├── services/
-  │   ├── scrapeLogs.js
+  │   ├── scrapeService.js
   │   └── sequencerService.js
   ├── utils/
   │   ├── generatePrivateKey.js
@@ -50,7 +50,7 @@ package.json
 - `src/controllers/sequencerController.js`: Handles the logic for API routes related to sequencers.
 - `src/models/mongoClient.js`: Handles MongoDB connection and provides functions to interact with the database.
 - `src/routes/sequencerRoutes.js`: Defines the routes for sequencer operations.
-- `src/services/scrapeLogs.js`: Contains logic for scraping and analyzing transactions from Etherscan.
+- `src/services/scrapeService.js`: Contains logic for scraping and analyzing transactions from Etherscan.
 - `src/services/sequencerService.js`: Contains business logic for querying the database.
 - `src/utils/generatePrivateKey.js`: Generates a new private key for ECDSA.
 - `src/utils/signMessage.js`: Utility function to sign messages using ECDSA.
@@ -95,14 +95,6 @@ node src/index.js
 ```
 http://localhost:3000/sequencer
 ```
-
-### Screenshots
-
-MongoDB logs
-![](https://github.com/kleczynski/herodotusTask/blob/master/src/img/mongo.png)
-
-Signing Users 
-![](https://github.com/kleczynski/herodotusTask/blob/master/src/img/signing.png)
 
 ### Resources
 [Optimism Fault Proofs Explainer](https://docs.optimism.io/stack/protocol/fault-proofs/explainer)
