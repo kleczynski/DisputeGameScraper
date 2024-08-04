@@ -1,5 +1,5 @@
 
-# Herodotus Task
+# Dispute Game Optimism Scraper
 
 ### Project Overview
 
