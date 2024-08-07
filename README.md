@@ -26,34 +26,35 @@ node_modules/
 .gitignore
 src/
   ├── controllers/
-  │   └── sequencerController.js
+  │   └── sequencerController.ts
   ├── models/
-  │   └── mongoClient.js
+  │   └── mongoClient.ts
   ├── routes/
-  │   └── sequencerRoutes.js
+  │   └── sequencerRoutes.ts
   ├── services/
-  │   ├── scrapeService.js
-  │   └── sequencerService.js
+  │   ├── scrapeService.ts
+  │   └── sequencerService.ts
   ├── utils/
-  │   ├── generatePrivateKey.js
-  │   └── signMessage.js
-  ├── index.js
-  └── server.js
+  │   ├── generatePrivateKey.ts
+  │   └── signMessage.ts
+  ├── index.ts
+  └── server.ts
 package-lock.json
 package.json
+tsconfig.json
 ```
 
 ### File Descriptions
 
-- `src/index.js`: Entry point of the application. Starts the Express server.
-- `src/server.js`: Sets up the Express server, connects to MongoDB, and uses the routes.
-- `src/controllers/sequencerController.js`: Handles the logic for API routes related to sequencers.
-- `src/models/mongoClient.js`: Handles MongoDB connection and provides functions to interact with the database.
-- `src/routes/sequencerRoutes.js`: Defines the routes for sequencer operations.
-- `src/services/scrapeService.js`: Contains logic for scraping and analyzing transactions from Etherscan.
-- `src/services/sequencerService.js`: Contains business logic for querying the database.
-- `src/utils/generatePrivateKey.js`: Generates a new private key for ECDSA.
-- `src/utils/signMessage.js`: Utility function to sign messages using ECDSA.
+- `src/index.ts`: Entry point of the application. Starts the Express server.
+- `src/server.ts`: Sets up the Express server, connects to MongoDB, and uses the routes.
+- `src/controllers/sequencerController.ts`: Handles the logic for API routes related to sequencers.
+- `src/models/mongoClient.ts`: Handles MongoDB connection and provides functions to interact with the database.
+- `src/routes/sequencerRoutes.ts`: Defines the routes for sequencer operations.
+- `src/services/scrapeService.ts`: Contains logic for scraping and analyzing transactions from Etherscan.
+- `src/services/sequencerService.ts`: Contains business logic for querying the database.
+- `src/utils/generatePrivateKey.ts`: Generates a new private key for ECDSA.
+- `src/utils/signMessage.ts`: Utility function to sign messages using ECDSA.
 
 ### Setup 
 #### Prerequisites
@@ -85,11 +86,11 @@ PORT=3000
 
 ### Running the Scraper 
 ```
-node src/services/scrapeLogs.js
+node src/services/scrapeLogs.ts
 ```
 ### Starting the Server
 ```
-node src/index.js
+node src/index.ts
 ```
 ### Accessing the API
 ```
