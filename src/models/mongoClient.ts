@@ -1,19 +1,20 @@
-require('dotenv').config();
-const { MongoClient } = require('mongodb');
+import 'dotenv/config';
+import { MongoClient, Db, Collection } from 'mongodb';
 
-const MONGO_URI = process.env.MONGO_URI;
-const DATABASE_NAME = process.env.DATABASE_NAME;
+const MONGO_URI = process.env.MONGO_URI as string;
+const DATABASE_NAME = process.env.DATABASE_NAME as string;
+const COLLECTION_NAME = process.env.COLLECTION_NAME as string;
 
 if (!MONGO_URI || !DATABASE_NAME) {
     console.error('Missing required environment variables. Please ensure MONGO_URI and DATABASE_NAME are set in .env file.');
     process.exit(1);
 }
 
-const client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(MONGO_URI);
 
-let db;
+let db: Db;
 
-async function connectToMongoDB() {
+async function connectToMongoDB(): Promise<void> {
     try {
         await client.connect();
         console.log('Connected to MongoDB');
@@ -24,13 +25,13 @@ async function connectToMongoDB() {
     }
 }
 
-async function insertTransaction(data) {
+async function insertTransaction(data: any[]): Promise<void> {
     if (!db) {
         throw new Error('Database not connected. Please call connectToMongoDB first.');
     }
     
     try {
-        const collection = db.collection(process.env.COLLECTION_NAME);
+        const collection: Collection = db.collection(COLLECTION_NAME);
         const result = await collection.insertMany(data);
         console.log('Inserted documents:', result.insertedCount);
     } catch (error) {
@@ -39,7 +40,7 @@ async function insertTransaction(data) {
     }
 }
 
-async function closeConnection() {
+async function closeConnection(): Promise<void> {
     try {
         await client.close();
         console.log('MongoDB connection closed');
@@ -48,14 +49,14 @@ async function closeConnection() {
     }
 }
 
-function getDb() {
+function getDb(): Db {
     if (!db) {
         throw new Error('Database not connected. Please call connectToMongoDB first.');
     }
     return db;
 }
 
-module.exports = {
+export {
     connectToMongoDB,
     insertTransaction,
     closeConnection,

@@ -1,11 +1,12 @@
-const { findSequencers } = require('../service/sequencerService');
-const signMessage = require('../utils/signMessage');
+import { Request, Response } from 'express';
+import { findSequencers } from '../service/sequencerService';
+import { signMessage } from '../utils/signMessage';
 
-async function getSequencers(req, res) {
+async function getSequencers(req: Request, res: Response): Promise<void> {
     try {
         const sequencers = await findSequencers();
 
-        const privateKey = process.env.PRIVATE_KEY;
+        const privateKey = process.env.PRIVATE_KEY as string;
         const message = JSON.stringify(sequencers);
         const signature = await signMessage(message, privateKey);
 
@@ -16,4 +17,4 @@ async function getSequencers(req, res) {
     }
 }
 
-module.exports = { getSequencers };
+export { getSequencers };

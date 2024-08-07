@@ -1,12 +1,12 @@
-require('dotenv').config({path:'../../.env'});
-const axios = require('axios');
-const { ethers } = require('ethers');
-const { connectToMongoDB, insertTransaction, closeConnection } = require('../models/mongoClient');
+import 'dotenv/config';
+import axios from 'axios';
+import { ethers } from 'ethers';
+import { connectToMongoDB, insertTransaction, closeConnection } from '../models/mongoClient';
 
 const ETHERSCAN_API_KEY = process.env.API_KEY;
 const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 const provider = new ethers.InfuraProvider('mainnet', INFURA_PROJECT_ID);
-const proxyAddress = '0xe5965Ab5962eDc7477C8520243A95517CD252fA9'; 
+const proxyAddress = '0xe5965Ab5962eDc7477C8520243A95517CD252fA9';
 
 if (!ETHERSCAN_API_KEY || !INFURA_PROJECT_ID) {
     console.error('Missing required environment variables. Please ensure ETHERSCAN_API_KEY and INFURA_PROJECT_ID are set in .env file.');
@@ -87,7 +87,7 @@ const gameContractAbi = [
     }
 ];
 
-async function getAbi(contractAddress) {
+async function getAbi(contractAddress: string): Promise<any> {
     const url = `https://api.etherscan.io/api?module=contract&action=getabi&address=${contractAddress}&apikey=${ETHERSCAN_API_KEY}`;
     const response = await axios.get(url);
     if (response.data.status === '1') {
@@ -97,33 +97,33 @@ async function getAbi(contractAddress) {
     }
 }
 
-async function getImplementationAddress(proxyAddress) {
+async function getImplementationAddress(proxyAddress: string): Promise<string> {
     const implementationSlot = '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc';
     const storageValue = await provider.getStorage(proxyAddress, implementationSlot);
     return ethers.getAddress(`0x${storageValue.substr(26)}`);
 }
 
-async function getGameCount(contract) {
+async function getGameCount(contract: ethers.Contract): Promise<number> {
     return await contract.gameCount();
 }
 
-async function getGameAtIndex(contract, index) {
+async function getGameAtIndex(contract: ethers.Contract, index: number): Promise<any> {
     return await contract.gameAtIndex(index);
 }
 
-async function getClaimDataLength(contract) {
+async function getClaimDataLength(contract: ethers.Contract): Promise<number> {
     return await contract.claimDataLen();
 }
 
-async function getClaimData(contract, index) {
+async function getClaimData(contract: ethers.Contract, index: number): Promise<any> {
     return await contract.claimData(index);
 }
 
-async function getGameStatus(contract) {
+async function getGameStatus(contract: ethers.Contract): Promise<number> {
     return await contract.status();
 }
 
-async function main() {
+async function main(): Promise<void> {
     await connectToMongoDB();
     try {
         const implementationAddress = await getImplementationAddress(proxyAddress);
@@ -135,8 +135,8 @@ async function main() {
         const gameCount = await getGameCount(proxyContract);
         console.log('Total games:', gameCount.toString());
 
-        let dataToInsert = [];
-        let proposerGameResults = {};
+        let dataToInsert: any[] = [];
+        let proposerGameResults: { [key: string]: { defended: number; disputed: number; total: number } } = {};
 
         for (let i = 0; i < gameCount; i++) {
             const gameDetails = await getGameAtIndex(proxyContract, i);
@@ -149,16 +149,16 @@ async function main() {
             console.log(`Game ${i} has ${claimDataLength} claims`);
 
             let validTransactions = {
-                proposerTransactionHash: null,
-                challengedTransactionHashes: []
+                proposerTransactionHash: null as string | null,
+                challengedTransactionHashes: [] as string[]
             };
 
             let invalidTransactions = {
-                proposerTransactionHash: null,
-                challengedTransactionHashes: []
+                proposerTransactionHash: null as string | null,
+                challengedTransactionHashes: [] as string[]
             };
 
-            let rootClaimant = null;
+            let rootClaimant: string | null = null;
             let gameStatus = await getGameStatus(gameContract);
 
             for (let j = 0; j < claimDataLength; j++) {
